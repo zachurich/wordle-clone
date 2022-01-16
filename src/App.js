@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./app.css";
 
+const ENTER = "enter";
+const BACKSPACE = "[x]";
+
 const keys = [
   "q",
   "w",
@@ -21,6 +24,7 @@ const keys = [
   "j",
   "k",
   "l",
+  ENTER,
   "z",
   "x",
   "c",
@@ -28,7 +32,13 @@ const keys = [
   "b",
   "n",
   "m",
+  BACKSPACE,
 ];
+
+const rowOne = keys.slice(0, keys.indexOf("p") + 1);
+const rowTwo = keys.slice(keys.indexOf("p") + 1, keys.indexOf("l") + 1);
+const rowThree = keys.slice(keys.indexOf("l") + 1, keys.length);
+const keyRows = [rowOne, rowTwo, rowThree];
 
 const guessCount = 6;
 
@@ -73,13 +83,13 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="app">
       <header>
         <h1> 🔥 Wordle Clone 🔥</h1>
         <h2>Turn: {currentTurn}</h2>
       </header>
       <main>
-        <section>
+        <section className="guess-grid">
           <GuessGrid guesses={guesses} currentGuess={currentGuess} />
         </section>
         <section className="keyboard">
@@ -91,13 +101,9 @@ function App() {
 }
 
 function GuessGrid({ currentGuess, guesses }) {
-  return (
-    <div>
-      {Object.entries(guesses).map(([guessCount, guessValues]) => (
-        <Guess guessValues={guessValues} />
-      ))}
-    </div>
-  );
+  return Object.entries(guesses).map(([guessCount, guessValues]) => (
+    <Guess guessValues={guessValues} />
+  ));
 }
 
 function Guess({ guessValues }) {
@@ -111,10 +117,16 @@ function Guess({ guessValues }) {
 }
 
 function KeyBoard({ onLetterClick }) {
-  return keys.map((key) => (
-    <button onClick={() => onLetterClick(key)}>
-      <strong>{key.toUpperCase()}</strong>
-    </button>
+  return keyRows.map((row) => (
+    <div className="key-row">
+      {row.map((key) => {
+        return (
+          <button className="key" onClick={() => onLetterClick(key)}>
+            <strong>{key.toUpperCase()}</strong>
+          </button>
+        );
+      })}
+    </div>
   ));
 }
 
