@@ -63,7 +63,9 @@ const initialGuesses = {
   6: emptyGuess,
 };
 
-const correctWord = "raven";
+const wordList = ["raven", "quiet", "words"];
+
+const correctWord = wordList[Math.floor(Math.random() * wordList.length)];
 
 const getLetterStateClass = (guessValues, letter) => {
   let guessState;
