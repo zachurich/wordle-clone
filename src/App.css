@@ -6,13 +6,18 @@
   --tertiary: orange;
   --disabled: #ddd;
   --text: white;
+  --black: rgb(24, 24, 24);
 }
 
 body {
   font-family: "Open Sans", sans-serif;
   text-align: center;
-  background-color: black;
+  background-color: rgb(24, 24, 24);
   color: var(--text);
+}
+
+h2 {
+  font-weight: 600;
 }
 
 .app {
@@ -21,6 +26,7 @@ body {
   justify-content: center;
   flex-direction: column;
   position: relative;
+  height: 100vh;
 }
 
 .message {
@@ -61,7 +67,7 @@ body {
   border: 2px solid var(--primary);
   border-radius: 2px;
   margin: 5px;
-  font-weight: bold;
+  font-weight: 800;
   font-size: 1.5rem;
   text-transform: uppercase;
 }
@@ -85,15 +91,15 @@ body {
   cursor: pointer;
   padding: 20px 15px;
   margin: 1px;
-  font-weight: bold;
+  font-weight: 800;
   text-transform: uppercase;
   border: 2px solid var(--primary);
   border-radius: 3px;
   transition: 50ms ease-in-out;
-  color: black;
+  color: var(--black);
 }
 
-.key:hover {
+.key:not(:disabled):hover {
   transform: scale(1.1);
   box-shadow: 0 10px 10px -5px  rgba(0,0,0,0.8);
 }

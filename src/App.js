@@ -5,7 +5,7 @@ import "./app.css";
 const ENTER = "Enter";
 const BACKSPACE = "Backspace";
 
-const keys = [
+const KEYS = [
   "q",
   "w",
   "e",
@@ -36,9 +36,10 @@ const keys = [
   BACKSPACE,
 ];
 
-const rowOne = keys.slice(0, keys.indexOf("p") + 1);
-const rowTwo = keys.slice(keys.indexOf("p") + 1, keys.indexOf("l") + 1);
-const rowThree = keys.slice(keys.indexOf("l") + 1, keys.length);
+const rowOne = KEYS.slice(0, KEYS.indexOf("p") + 1);
+const rowTwo = KEYS.slice(KEYS.indexOf("p") + 1, KEYS.indexOf("l") + 1);
+const rowThree = KEYS.slice(KEYS.indexOf("l") + 1, KEYS.length);
+
 const keyRows = [rowOne, rowTwo, rowThree];
 
 const guessCount = 6;
@@ -96,8 +97,7 @@ const getGridLetterState = (
 ) => {
   if (
     (currentTurn !== rowTurn && letter) ||
-    (currentTurn === rowTurn && won) ||
-    (currentTurn === rowTurn && lost)
+    (currentTurn === rowTurn && (won || lost))
   ) {
     return getLetterStateClass(guessValues, letter);
   }
@@ -167,7 +167,7 @@ function App() {
 
   const onKeyClick = useCallback(
     (keyValue) => {
-      if (keys.includes(keyValue)) {
+      if (KEYS.includes(keyValue)) {
         if (keyValue === ENTER) return submitGuess();
 
         if (keyValue === BACKSPACE) return backspace();
@@ -200,7 +200,7 @@ function App() {
     <div className="app">
       <header>
         <h1> 🔥 Wordle Clone 🔥</h1>
-        <h2>Turn: {currentTurn}</h2>
+        <h2>Remaining: {guessCount - currentTurn}</h2>
       </header>
       {error ? (
         <Message text={error} clearError={() => setError(undefined)} isError />
@@ -219,7 +219,12 @@ function App() {
           />
         </section>
         <section className="keyboard">
-          <KeyBoard won={won} onKeyClick={onKeyClick} guessList={guessList} />
+          <KeyBoard
+            won={won}
+            lost={lost}
+            onKeyClick={onKeyClick}
+            guessList={guessList}
+          />
         </section>
       </main>
     </div>
@@ -238,7 +243,6 @@ function GuessGrid({
   return Object.entries(guessRows).map(([key, turnValues]) => (
     <Guess
       key={`${currentTurn}-${key}`}
-      correctWord={correctWord}
       currentTurn={currentTurn}
       rowTurn={Number(key)}
       guessValues={turnValues}
@@ -248,7 +252,7 @@ function GuessGrid({
   ));
 }
 
-function Guess({ correctWord, currentTurn, rowTurn, guessValues, won, lost }) {
+function Guess({ currentTurn, rowTurn, guessValues, won, lost }) {
   return (
     <div className="guess-row">
       {guessValues.map((letter, index) => {
@@ -279,12 +283,12 @@ function Guess({ correctWord, currentTurn, rowTurn, guessValues, won, lost }) {
   );
 }
 
-function KeyBoard({ won, onKeyClick, guessList }) {
+function KeyBoard({ won, lost, onKeyClick, guessList }) {
   return keyRows.map((row, index) => (
     <div key={`row-${index}`} className="key-row">
       {row.map((key) => (
         <button
-          disabled={won}
+          disabled={won || lost}
           key={key}
           className={classNames("key", getKeyboardLetterState(guessList, key))}
           onClick={() => onKeyClick(key)}
@@ -298,8 +302,10 @@ function KeyBoard({ won, onKeyClick, guessList }) {
 
 function Message({ text, clearError, isError }) {
   useEffect(() => {
-    setTimeout(() => clearError(), 1000);
-  }, []);
+    if (clearError) {
+      setTimeout(() => clearError(), 1000);
+    }
+  }, [clearError]);
   return (
     <div className={`message message__${isError ? "error" : "success"}`}>
       {text}
