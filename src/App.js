@@ -42,26 +42,19 @@ const rowThree = KEYS.slice(KEYS.indexOf("l") + 1, KEYS.length);
 
 const keyRows = [rowOne, rowTwo, rowThree];
 
-const guessCount = 6;
+const initialGuesses = Array.from({ length: 6 }, (_, i) => i).map(() => [
+  "",
+  "",
+  "",
+  "",
+  "",
+]);
 
-const initialCurrentGuess = {
-  1: "",
-  2: "",
-  3: "",
-  4: "",
-  5: "",
-};
+const guessCount = initialGuesses.length - 1;
 
-const emptyGuess = ["", "", "", "", ""];
-
-const initialGuesses = {
-  1: emptyGuess,
-  2: emptyGuess,
-  3: emptyGuess,
-  4: emptyGuess,
-  5: emptyGuess,
-  6: emptyGuess,
-};
+const initialCurrentGuess = Array.from({ length: 5 }, (_, i) => i).map(
+  () => ""
+);
 
 const wordList = ["raven", "quiet", "words"];
 
@@ -118,7 +111,7 @@ const getKeyboardLetterState = (guessList, key) => {
 };
 
 function App() {
-  const [currentTurn, setCurrentTurn] = useState(1);
+  const [currentTurn, setCurrentTurn] = useState(0);
 
   const [guessList, setGuessList] = useState(initialGuesses);
 
@@ -139,7 +132,7 @@ function App() {
     if (Object.values(currentGuess).join("") === correctWord) {
       setGuessList(update);
       setWon(true);
-    } else if (currentGuess[5] && currentTurn < guessCount) {
+    } else if (currentGuess[4] && currentTurn < guessCount) {
       setGuessList(update);
       setCurrentGuess(initialCurrentGuess);
       setCurrentTurn(currentTurn + 1);
@@ -233,14 +226,7 @@ function App() {
   );
 }
 
-function GuessGrid({
-  correctWord,
-  currentTurn,
-  currentGuess,
-  guesses,
-  won,
-  lost,
-}) {
+function GuessGrid({ currentTurn, currentGuess, guesses, won, lost }) {
   const guessRows = { ...guesses, [currentTurn]: Object.values(currentGuess) };
   return Object.entries(guessRows).map(([key, turnValues]) => (
     <Guess
