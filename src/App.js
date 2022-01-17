@@ -152,9 +152,9 @@ function App() {
 
     const update = {
       ...currentGuess,
-      [currentLetterIndex && currentLetterIndex > 1
+      [currentLetterIndex && currentLetterIndex > 0
         ? currentLetterIndex - 1
-        : 5]: "",
+        : 4]: "",
     };
 
     setCurrentGuess(update);
