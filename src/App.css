@@ -1,6 +1,18 @@
+:root {
+  --transparent: rgba(0,0,0,0.02);
+  --primary: rgba(255, 255, 255, 0.473);
+  --success: green;
+  --error: rgb(223, 47, 47);
+  --tertiary: orange;
+  --disabled: #ddd;
+  --text: white;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   text-align: center;
+  background-color: black;
+  color: var(--text);
 }
 
 .app {
@@ -8,6 +20,26 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+}
+
+.message {
+  position: absolute;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px -5px  var(--transparent);
+  font-weight: bold;
+  color: white;
+  border: 2px solid var(--primary);
+}
+
+.message__error {
+  background-color: var(--error);
+}
+
+.message__success {
+  background-color: var(--success);
 }
 
 .guess-grid {
@@ -20,17 +52,28 @@ body {
   display: flex;
 }
 
-.guess-row__letter {
-  display: inline-block;
+.row-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 50px;
   width: 50px;
-  border: 2px solid grey;
+  border: 2px solid var(--primary);
+  border-radius: 2px;
   margin: 5px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-transform: uppercase;
 }
 
-/*
-Keyboard
-*/
+.row-letter__empty {
+  border-color: var(--tertiary);
+}
+
+.row-letter__won {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
 
 .keyboard {
   margin: 20px;
@@ -39,6 +82,43 @@ Keyboard
 }
 
 .key {
+  cursor: pointer;
   padding: 20px 15px;
-  margin: 2px;
+  margin: 1px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 2px solid var(--primary);
+  border-radius: 3px;
+  transition: 50ms ease-in-out;
+  color: black;
+}
+
+.key:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 10px -5px  rgba(0,0,0,0.8);
+}
+
+.key:disabled {
+  cursor: not-allowed;
+  border-color: var(--disabled);
+  /* background-color: var(--primary);
+  color: rgba(0,0,0, 0.3); */
+}
+
+.right-wrong-place {
+  background-color: var(--tertiary);
+  color: white;
+  border-color: var(--tertiary);
+}
+
+
+.right-right-place {
+  background-color: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+.wrong {
+ background-color: var(--primary);
+ color: white;
 }
